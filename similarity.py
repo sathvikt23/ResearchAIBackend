@@ -36,8 +36,8 @@ class search:
         model=self.useModel()
         query_embedding=model.encode(query,convert_to_tensor=True).to("cuda")
         #start_time=timer()
-        #dot_scores=util.cos_sim(a=query_embedding, b=embeddings)[0]
-        dot_scores=util.dot_score(a=query_embedding, b=embeddings)[0]
+        dot_scores=util.cos_sim(a=query_embedding, b=embeddings)[0]
+        #dot_scores=util.dot_score(a=query_embedding, b=embeddings)[0]
         #end_time=timer()
         #print(f"{end_time-start_time}")
         scores,indices =torch.topk(input=dot_scores,k=n_resources_to_return)
@@ -68,16 +68,15 @@ class search:
                                                 embeddings=embeddings,
                                                  
                                                 n_resources_to_return=5)
-        self.print_top_results_and_scores(scores,indices)
+        #self.print_top_results_and_scores(scores,indices)
         #print(self.pages_and_chunks[indices[0]+49])
-        """for score , idx in zip(scores,indices):
-            print(f"Score {score}")
-            print("Text:")
-            print(self.pages_and_chunks[idx]["sentence_chunk"])
-            print(f"Page no {self.pages_and_chunks[idx]["page_number"]}")
-            print("\n")"""
+        final_pages=[]
+        for score , idx in zip(scores,indices):
+           
+            final_pages.append(self.pages_and_chunks[idx])
+            
         
-        return [scores, indices,self.pages_and_chunks]
+        return [scores, indices,final_pages]
 
 
 

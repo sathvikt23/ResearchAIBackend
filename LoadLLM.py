@@ -81,7 +81,7 @@ class gemma:
                     "model_mem_gb": round(model_mem_gb, 2)}
 
         print(get_model_mem_size(self.llm_model))
-    def setDialogue_template(self,query):
+    def setDialogue_template1(self,query):
         input_text=query
         dialogue_template =[
             {
@@ -93,27 +93,32 @@ class gemma:
                                             tokenize=False,
                                             add_generation_prompt=True)
         return prompt
-    def setDialogue_template(query:str,context_items:list[dict])->str:
+    def setDialogue_template2(self,query:str,context_items:list[dict])->str:
         context="- "+"\n-".join([item["sentence_chunk"] for item in context_items])
         base_prompt= f"""
     
         take the help of context items and answer the query
         
+        
+        
+
+        -------------
         Context items :
         {context}
-        Query:{query}"""
+        Query:{query}
+        """
         
         return base_prompt
-    def askGemma(self , query):
-        prompt=self.setDialogue_template(query)
+    def askGemma1(self , query):
+        prompt=self.setDialogue_template1(query)
         input_ids=self.tokenizer(prompt,return_tensors="pt").to("cuda")
         outputs=self.llm_model.generate(**input_ids,max_new_tokens=500)
         #print(f"Model output token {outputs[0]}")
         outputs_decoded=self.tokenizer.decode(outputs[0])
-        print(outputs_decoded)
-    def askGemma(self,query,pages_and_chunks,scores,indices):
-        prompt=query
-        print(prompt)
+        return outputs_decoded
+    def askGemma2(self,query,pages_and_chunks,scores,indices):
+        prompt=self.setDialogue_template2(query,pages_and_chunks)
+        
         input_ids= self.tokenizer(prompt ,return_tensors="pt").to("cuda")
 
         outputs=self.llm_model.generate(**input_ids, temperature=0.7,
@@ -127,7 +132,8 @@ class gemma:
             #print(i)
             if i in finaloutput:
                 print("checked")
-                finaloutput = self.askGemma(query)
+                
+                finaloutput = self.askGemma1(query)
                 break
                 
         print(f"\n\n\n\nQuery:{query} \n<-------------------------------------------->\n RAG answer \n{finaloutput}")

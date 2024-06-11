@@ -12,7 +12,7 @@ class ExtractText:
         return cleaned_text
     def open_and_read_pdf(self,pdf_path:str)->list[dict]:
         doc =fitz.open(pdf_path)
-        print(type(doc))
+        print(doc)
         pages_and_texts=[]
         for page_number , page in  tqdm (enumerate (doc)):
             text =page.get_text()
