@@ -2,25 +2,45 @@ import torch
 import numpy as np 
 import pandas as pd 
 import textwrap
+import db
 from sentence_transformers import util,SentenceTransformer
+from pymongo import MongoClient
+
+from pymongo.errors import ConnectionFailure, OperationFailure
+import pickle
+# MongoDB connection details
+atlas_url = 'mongodb+srv://sathvikt23a:rKRC5yAGpbiSvhuD@cluster0.8dtd3nj.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
 class search:
     device=""
-    embeddings_df_save_path=""
+    username=""
     pages_and_chunks=[]
-    def __init__(self,embeddings_df_save_path,device):
+    def __init__(self,username,device):
         self.device=device
-        self.embeddings_df_save_path=embeddings_df_save_path
+        self.username=username
         
-        print(self.pages_and_chunks)
+        #print(self.pages_and_chunks)
     def toEmbeddings(self):
-        text_chunks_and_embeddings_df=pd.read_csv("text_chunks_and_embeddings_df.csv")
+        """dataaa=[]
+        client = MongoClient(atlas_url)
+        database = client['CentralData']
+        collection= database['embeddings']
+
+        # Query for a movie that has the title 'Back to the Future'
+        
+        data=collection.find({"data":"health"})
+        j=0
+        for i in data :
+             dataaa.extend(pickle.loads(i["embedding"]))
+             j+=1  
+        text_chunks_and_embeddings_df=pd.DataFrame(dataaa)"""
+        text_chunks_and_embeddings_df=pd.DataFrame(db.access.GetAllUserEmbeddings("Sathvik"))
         #converting embedding column to np.array
-        text_chunks_and_embeddings_df["embedding"]=text_chunks_and_embeddings_df["embedding"].apply(lambda x:np.fromstring(x.strip("[]") ,sep=" "))
+        #text_chunks_and_embeddings_df["embedding"]=text_chunks_and_embeddings_df["embedding"].apply(lambda x:np.fromstring(x.strip("[]") ,sep=" "))
         #convert our embeddings into a torch.tensor 
         embeddings=torch.tensor(np.stack(text_chunks_and_embeddings_df["embedding"].tolist(),axis=0),dtype=torch.float32).to("cuda")
         self.pages_and_chunks=text_chunks_and_embeddings_df.to_dict(orient="records")
-        print(text_chunks_and_embeddings_df)
-        print(embeddings.shape)
+        #print(text_chunks_and_embeddings_df)
+        #print(embeddings.shape)
         return embeddings
     def useModel(self):
         embedding_model=SentenceTransformer(model_name_or_path="all-mpnet-base-v2",device=self.device)

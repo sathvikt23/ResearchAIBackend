@@ -135,8 +135,9 @@ class gemma:
                 
                 finaloutput = self.askGemma1(query)
                 break
-                
+        
         print(f"\n\n\n\nQuery:{query} \n<-------------------------------------------->\n RAG answer \n{finaloutput}")
+        return finaloutput
 
 
 

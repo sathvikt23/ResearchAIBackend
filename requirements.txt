@@ -11,4 +11,9 @@ accelerate
 bitsandbytes
 jupyter
 wheel
+fastapi[all]
+pymongo[srv]
+flask
+youtube-transcript-api
+
 # flash-attn
