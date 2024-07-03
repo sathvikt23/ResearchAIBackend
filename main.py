@@ -34,7 +34,7 @@ def generateEmbeddings():
 
     else:
         print("Updating ....")
-        pages_and_texts = ET.urlDownloadLink(url=dataname)
+        pages_and_texts = ET.runlink(dataname)
         pages_and_chunks_over_min_token_len = CK.Convert(pages_and_texts)
         EB = eb.genrateEmbeddings("cuda")
         EB.get(dataname ,pages_and_chunks_over_min_token_len[0])

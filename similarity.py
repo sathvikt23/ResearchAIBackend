@@ -33,7 +33,7 @@ class search:
              dataaa.extend(pickle.loads(i["embedding"]))
              j+=1  
         text_chunks_and_embeddings_df=pd.DataFrame(dataaa)"""
-        text_chunks_and_embeddings_df=pd.DataFrame(db.access.GetAllUserEmbeddings("Sathvik"))
+        text_chunks_and_embeddings_df=pd.DataFrame(db.access.GetAllUserEmbeddings(self.username))
         #converting embedding column to np.array
         #text_chunks_and_embeddings_df["embedding"]=text_chunks_and_embeddings_df["embedding"].apply(lambda x:np.fromstring(x.strip("[]") ,sep=" "))
         #convert our embeddings into a torch.tensor 
