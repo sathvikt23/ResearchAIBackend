@@ -9,7 +9,7 @@ import db
 EB = eb.genrateEmbeddings("cuda")
 ET = web.ExtractText()
 CK = ck.ChunksConversion()
-LLM = llm.gemma("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")
+LLM = llm.gemma("hf_token")
 
 app = FastAPI()
 
