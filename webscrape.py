@@ -6,6 +6,7 @@ import pandas as pd
 from youtube_transcript_api import YouTubeTranscriptApi as yta
 from langchain_community.document_loaders import WebBaseLoader
 from langchain_community.document_loaders.telegram import text_to_docs
+from serpapi import GoogleSearch
 import os
 class ExtractText:
     
@@ -103,7 +104,36 @@ class ExtractText:
             cleaned_data.extend(cleaned_documents)
 
         return cleaned_data
+    
+    def webRAG(self,links):
+         finaldata=""
+         for i in links:
+              data=self.webscrape(i)
+              for i in data :
+                   finaldata+=(list(i)[0][1])
 
+         finaldata=finaldata.replace("\xa0","")
+         finaldata=finaldata.replace("‚Äî","")
+         return self.rawtext(str(finaldata))
+    def serp(self,query):
+         params = {
+            "api_key": "df39187b734f04b75757c1500190491c6b45f9db901d4d466837053854b4329d",
+            "engine": "google",
+            "q": query,
+             "location": "India",
+            "google_domain": "google.com",
+            "gl": "us",
+            "hl": "en"
+            }
+         search = GoogleSearch(params)
+         results = search.get_dict()
+         data=results["organic_results"]
+         links=[]
+         for i in data:
+            links.append(i["link"])
+         return self.webRAG(links)
+              
+              
 
     def runlink(self,given_link):
          if "youtube.com/watch?v" in given_link:
@@ -116,6 +146,9 @@ class ExtractText:
               finaldata=""
               for i in data :
                    finaldata+=(list(i)[0][1])
+              finaldata=finaldata.replace("\xa0","")
+              finaldata=finaldata.replace("‚Äî","")
+
               return self.rawtext(str(finaldata))
             
 

@@ -36,6 +36,16 @@ class genrateEmbeddings:
         db.access.UpdateEmbedding(dataname,self.pages_and_chunks_over_min_token_len2)
         print("---------------------------------------------------------")
         #print(text_chunks_embeddings)
+    def get2(self ,pages_and_chunks_over_min_token_len):
+        self.pages_and_chunks_over_min_token_len2=pages_and_chunks_over_min_token_len
+        for item in tqdm(pages_and_chunks_over_min_token_len):
+          item["embedding"] = self.embedding_model.encode(item["sentence_chunk"])
+        #text_chunks=[item["sentence_chunk"] for item in pages_and_chunks_over_min_token_len]
+        #print(text_chunks[420])
+        #text_chunks_embeddings=self.embedding_model.encode(text_chunks,batch_size=12,convert_to_tensor=True)
+        return self.pages_and_chunks_over_min_token_len2
+        print("---------------------------------------------------------")
+        #print(text_chunks_embeddings)
 
     def saveToCsv(self):
         print("---------------------------------------------------------")

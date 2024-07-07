@@ -97,13 +97,14 @@ class gemma:
         context="- "+"\n-".join([item["sentence_chunk"] for item in context_items])
         base_prompt= f"""
     
-        take the help of context items and answer the query
+        take the help of provided information and answer the query 
         
         
         
 
         -------------
-        Context items :
+        
+        Information :
         {context}
         Query:{query}
         """
@@ -118,6 +119,7 @@ class gemma:
         return outputs_decoded
     def askGemma2(self,query,pages_and_chunks,scores,indices):
         prompt=self.setDialogue_template2(query,pages_and_chunks)
+        #print(prompt)
         
         input_ids= self.tokenizer(prompt ,return_tensors="pt").to("cuda")
 

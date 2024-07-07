@@ -15,5 +15,7 @@ fastapi[all]
 pymongo[srv]
 flask
 youtube-transcript-api
-
+google-search-results
+py-mon
+uvicorn
 # flash-attn
