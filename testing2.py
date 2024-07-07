@@ -1,7 +1,7 @@
 from serpapi import GoogleSearch
 
 params = {
-  "api_key": "df39187b734f04b75757c1500190491c6b45f9db901d4d466837053854b4329d",
+  "api_key": "",
   "engine": "google",
   "q": "Neil gogte",
   "location": "Austin, Texas, United States",
