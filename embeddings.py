@@ -10,7 +10,11 @@ from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure, OperationFailure
 import db 
 # MongoDB connection details
+<<<<<<< HEAD
 atlas_url = 'mongodb+srv://atlas_url'
+=======
+atlas_url = ''
+>>>>>>> 540203acf71f52dde8a5439dd2293475146faa05
 
 import re 
 import pandas as pd 
@@ -55,9 +59,7 @@ class genrateEmbeddings:
         text_chunks_and_embeddings_df.to_csv(embeddings_df_save_path, index =False )
         print("++++++++++++++++++++++++")
         
-        client = MongoClient(atlas_url)
-        database = client['solutiondata']
-        collection= database['a']
+        
         db.access.UpdateEmbedding("health",self.pages_and_chunks_over_min_token_len2)
         # Query for a movie that has the title 'Back to the Future'
         """query = {'title': 'Back to the Future'}
