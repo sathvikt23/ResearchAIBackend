@@ -91,7 +91,7 @@ class ExtractText:
 
     def webscrape(self,link):
 
-        os.environ['USER_AGENT'] = str(link)
+        
 
         loader = WebBaseLoader(link)
         data = loader.load()
@@ -108,16 +108,22 @@ class ExtractText:
     def webRAG(self,links):
          finaldata=""
          for i in links:
+            try:
               data=self.webscrape(i)
-              for i in data :
-                   finaldata+=(list(i)[0][1])
+            except:
+               continue
+            for i in data :
+                   try:
+                    finaldata+=(list(i)[0][1])
+                   except:
+                        continue
 
          finaldata=finaldata.replace("\xa0","")
          finaldata=finaldata.replace("‚Äî","")
          return self.rawtext(str(finaldata))
     def serp(self,query):
          params = {
-            "api_key": "serp_api_token",
+            "api_key": "google_serp_api_token",
             "engine": "google",
             "q": query,
              "location": "India",
@@ -131,7 +137,8 @@ class ExtractText:
          links=[]
          for i in data:
             links.append(i["link"])
-         return self.webRAG(links)
+         print(links)
+         return self.webRAG(links[0:4])
               
               
 
@@ -145,10 +152,11 @@ class ExtractText:
               data=self.webscrape(given_link)
               finaldata=""
               for i in data :
-                   finaldata+=(list(i)[0][1])
+                   temp=dict(i)
+
+
+                   finaldata+=(temp["page_content"])
               finaldata=finaldata.replace("\xa0","")
               finaldata=finaldata.replace("‚Äî","")
 
               return self.rawtext(str(finaldata))
-            
-

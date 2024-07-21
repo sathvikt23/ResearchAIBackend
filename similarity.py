@@ -9,7 +9,7 @@ from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure, OperationFailure
 import pickle
 # MongoDB connection details
-atlas_url = ''
+atlas_url = 'mongodb+srv://atlas_url'
 class search:
     device=""
     username=""
@@ -37,7 +37,7 @@ class search:
         #converting embedding column to np.array
         #text_chunks_and_embeddings_df["embedding"]=text_chunks_and_embeddings_df["embedding"].apply(lambda x:np.fromstring(x.strip("[]") ,sep=" "))
         #convert our embeddings into a torch.tensor 
-        embeddings=torch.tensor(np.stack(text_chunks_and_embeddings_df["embedding"].tolist(),axis=0),dtype=torch.float32).to("cuda")
+        embeddings=torch.tensor(np.stack(text_chunks_and_embeddings_df["embedding"].tolist(),axis=0),dtype=torch.float32).to(self.device)
         self.pages_and_chunks=text_chunks_and_embeddings_df.to_dict(orient="records")
         #print(text_chunks_and_embeddings_df)
         #print(embeddings.shape)
@@ -48,7 +48,7 @@ class search:
         #converting embedding column to np.array
         #text_chunks_and_embeddings_df["embedding"]=text_chunks_and_embeddings_df["embedding"].apply(lambda x:np.fromstring(x.strip("[]") ,sep=" "))
         #convert our embeddings into a torch.tensor 
-        embeddings=torch.tensor(np.stack(text_chunks_and_embeddings_df["embedding"].tolist(),axis=0),dtype=torch.float32).to("cuda")
+        embeddings=torch.tensor(np.stack(text_chunks_and_embeddings_df["embedding"].tolist(),axis=0),dtype=torch.float32).to(self.device)
         self.pages_and_chunks=text_chunks_and_embeddings_df.to_dict(orient="records")
         #print(text_chunks_and_embeddings_df)
         #print(embeddings.shape)
@@ -65,7 +65,7 @@ class search:
                                 n_resources_to_return:int= 5,
                                 print_time:bool=True):
         model=self.useModel()
-        query_embedding=model.encode(query,convert_to_tensor=True).to("cuda")
+        query_embedding=model.encode(query,convert_to_tensor=True).to(self.device)
         #start_time=timer()
         dot_scores=util.cos_sim(a=query_embedding, b=embeddings)[0]
         #dot_scores=util.dot_score(a=query_embedding, b=embeddings)[0]

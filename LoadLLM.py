@@ -110,6 +110,23 @@ class gemma:
         """
         
         return base_prompt
+    def setDialogue_template3(self,query,context_items)->str:
+        
+        base_prompt= f"""
+    
+        take the help of provided information and answer the query 
+        
+        
+        
+
+        -------------
+        
+        Information :
+        {context_items}
+        Query:{query}
+        """
+        
+        return base_prompt
     def askGemma1(self , query):
         prompt=self.setDialogue_template1(query)
         input_ids=self.tokenizer(prompt,return_tensors="pt").to("cuda")
@@ -117,8 +134,8 @@ class gemma:
         #print(f"Model output token {outputs[0]}")
         outputs_decoded=self.tokenizer.decode(outputs[0])
         return outputs_decoded
-    def askGemma2(self,query,pages_and_chunks,scores,indices):
-        prompt=self.setDialogue_template2(query,pages_and_chunks)
+    def askGemma2(self,query,pages_and_chunks):
+        prompt=self.setDialogue_template3(query,pages_and_chunks)
         #print(prompt)
         
         input_ids= self.tokenizer(prompt ,return_tensors="pt").to("cuda")
@@ -139,6 +156,29 @@ class gemma:
                 break
         
         print(f"\n\n\n\nQuery:{query} \n<-------------------------------------------->\n RAG answer \n{finaloutput}")
+        return finaloutput
+    def askGemma3(self,query):
+        
+        #print(prompt)
+        
+        input_ids= self.tokenizer(query ,return_tensors="pt").to("cuda")
+
+        outputs=self.llm_model.generate(**input_ids, temperature=0.2,
+                                do_sample=True ,
+                                max_new_tokens=500)
+
+        output_text =self.tokenizer.decode (outputs[0])
+        finaloutput=output_text.replace(query," ")
+        l=["The context does not provide","false content","The context items do not provide","not provide","so I cannot answer"]
+        for i in l:
+            #print(i)
+            if i in finaloutput:
+                print("checked")
+                
+                finaloutput = self.askGemma1(query)
+                break
+        
+        
         return finaloutput
 
 
