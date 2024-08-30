@@ -6,7 +6,7 @@ import embeddings as eb
 import db
 import spacy 
 from spacy .lang.en.stop_words import STOP_WORDS
-
+import summarize as sz
 app = FastAPI()
 
 class EmbeddingRequest(BaseModel):
@@ -43,10 +43,11 @@ def generate_embeddings(request: EmbeddingRequest):
     else:
         print("Updating ....")
         pages_and_texts = ET.runlink(dataname)
+        sum_data=sz.sum.getall3(str(ET.full_final_data))
         pages_and_chunks_over_min_token_len = CK.Convert(pages_and_texts)
         EB.get(dataname, pages_and_chunks_over_min_token_len[0])
         UpdataUserData(username, dataname)
-        return {"message": "Embeddings generation process completed"}
+        return {"message": sum_data}
     
 
 @app.post("/webEmbeddings")

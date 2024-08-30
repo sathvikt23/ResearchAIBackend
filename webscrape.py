@@ -9,7 +9,7 @@ from langchain_community.document_loaders.telegram import text_to_docs
 from serpapi import GoogleSearch
 import os
 class ExtractText:
-    
+    full_final_data=""
     def init(self):
          print("intialized")
     def text_formatter(self,text:str)->str:
@@ -123,7 +123,7 @@ class ExtractText:
          return self.rawtext(str(finaldata))
     def serp(self,query):
          params = {
-            "api_key": "google_serp_api_token",
+           "api_key": "df39187b734f04b75757c1500190491c6b45f9db901d4d466837053854b4329d",
             "engine": "google",
             "q": query,
              "location": "India",
@@ -143,6 +143,8 @@ class ExtractText:
               
 
     def runlink(self,given_link):
+         def keep_ascii(text):
+           return ''.join(char for char in text if ord(char) < 128)  
          if "youtube.com/watch?v" in given_link:
              return self.rawtext(self.transcribe(given_link))
          elif "/open/download?type=pdf" in given_link:
@@ -158,5 +160,6 @@ class ExtractText:
                    finaldata+=(temp["page_content"])
               finaldata=finaldata.replace("\xa0","")
               finaldata=finaldata.replace("‚Äî","")
-
+              finaldata=keep_ascii(finaldata)
+              self.full_final_data=finaldata
               return self.rawtext(str(finaldata))

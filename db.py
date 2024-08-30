@@ -3,7 +3,7 @@ from pymongo.errors import ConnectionFailure, OperationFailure
 import numpy as np
 import pickle 
 # MongoDB connection details
-atlas_url = 'mongodb+srv://atlas_url'
+atlas_url = 'mongodb+srv://sathvikt23a:rKRC5yAGpbiSvhuD@cluster0.8dtd3nj.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
 client = MongoClient(atlas_url)
 database = client["CentralData"]
 collection= database['embeddings']

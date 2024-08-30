@@ -10,11 +10,7 @@ from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure, OperationFailure
 import db 
 # MongoDB connection details
-<<<<<<< HEAD
 atlas_url = 'mongodb+srv://atlas_url'
-=======
-atlas_url = ''
->>>>>>> 540203acf71f52dde8a5439dd2293475146faa05
 
 import re 
 import pandas as pd 

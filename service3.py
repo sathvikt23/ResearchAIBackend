@@ -5,7 +5,7 @@ import similarity as sm
 import webscrape as web 
 import embeddings as eb
 import chunks as ck
-LLM = llm.gemma("hf_token")
+LLM = llm.gemma("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")
 CK = ck.ChunksConversion()
 EB = eb.genrateEmbeddings("cuda")
 ET = web.ExtractText()
@@ -23,6 +23,7 @@ def llmAnswers(request:jsonSchema):
     data=request.data
     SM = sm.search(username, "cuda")
     if (data==""):
+        print("null")
         response =LLM.askGemma1(query)
         return ({"message":response })
     else :

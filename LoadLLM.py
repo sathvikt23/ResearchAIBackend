@@ -96,9 +96,11 @@ class gemma:
     def setDialogue_template2(self,query:str,context_items:list[dict])->str:
         context="- "+"\n-".join([item["sentence_chunk"] for item in context_items])
         base_prompt= f"""
-    
-        take the help of provided information and answer the query 
-        
+        **Instructions**
+        1)take the help of provided information and answer the query 
+        2)Represent headings with '*' ,based on level increase stars 
+        3)Only return the answer 
+        4)Do not repeat the prompt
         
         
 
@@ -114,7 +116,10 @@ class gemma:
         
         base_prompt= f"""
     
-        take the help of provided information and answer the query 
+        **Instructions**
+        1)take the help of provided information and answer the query 
+        2)Represent headings with '*' ,based on level increase stars 
+       
         
         
         
@@ -133,10 +138,15 @@ class gemma:
         outputs=self.llm_model.generate(**input_ids,max_new_tokens=500)
         #print(f"Model output token {outputs[0]}")
         outputs_decoded=self.tokenizer.decode(outputs[0])
-        return outputs_decoded
+        finaloutput=outputs_decoded.replace("<bos>"," ")
+        finaloutput=outputs_decoded.replace("<eos>"," ")
+        finaloutput=outputs_decoded.replace(prompt," ")
+        return finaloutput
     def askGemma2(self,query,pages_and_chunks):
+        
         prompt=self.setDialogue_template3(query,pages_and_chunks)
-        #print(prompt)
+        print("---------------------------------------------")
+        print(prompt)
         
         input_ids= self.tokenizer(prompt ,return_tensors="pt").to("cuda")
 
@@ -146,7 +156,22 @@ class gemma:
 
         output_text =self.tokenizer.decode (outputs[0])
         finaloutput=output_text.replace(prompt," ")
-        l=["The context does not provide","false content","The context items do not provide","not provide","so I cannot answer"]
+        a=f"""-------------
+        
+        Information :
+        {pages_and_chunks}
+        Query:{query}"""
+        finaloutput.replace(a,"")
+        a=f"""
+    
+        **Instructions**
+        1)take the help of provided information and answer the query 
+        2)Represent headings with '*' ,based on level increase stars 
+        """
+        finaloutput.replace(a,"")
+        finaloutput=finaloutput.replace("<bos>"," ")
+        finaloutput=finaloutput.replace("<eos>"," ")
+        l=["The context does not provide","false content","The context items do not provide","not provide","so I cannot answer"," I cannot find any information"]
         for i in l:
             #print(i)
             if i in finaloutput:
@@ -169,7 +194,7 @@ class gemma:
 
         output_text =self.tokenizer.decode (outputs[0])
         finaloutput=output_text.replace(query," ")
-        l=["The context does not provide","false content","The context items do not provide","not provide","so I cannot answer"]
+        l=["The context does not provide","false content","The context items do not provide","not provide","so I cannot answer"," I cannot find any information"]
         for i in l:
             #print(i)
             if i in finaloutput:

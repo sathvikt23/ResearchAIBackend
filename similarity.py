@@ -9,7 +9,7 @@ from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure, OperationFailure
 import pickle
 # MongoDB connection details
-atlas_url = 'mongodb+srv://atlas_url'
+atlas_url = 'mongodb+srv://sathvikt23a:rKRC5yAGpbiSvhuD@cluster0.8dtd3nj.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
 class search:
     device=""
     username=""
@@ -124,8 +124,5 @@ class search:
             
         
         return [scores, indices,final_pages]
-
-
-
-
+    
 
